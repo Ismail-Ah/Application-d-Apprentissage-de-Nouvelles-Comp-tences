@@ -1,0 +1,22 @@
+<resources>
+
+    <!-- Style pour TextInputLayout -->
+    <style name="Widget.LearnIzone.TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxBackgroundColor">?attr/colorSurface</item>
+        <item name="boxStrokeColor">?attr/colorPrimary</item>
+        <item name="hintTextAppearance">@style/TextAppearance.App.TextInputHint</item>
+    </style>
+
+    <!-- Style pour le bouton -->
+    <style name="Widget.LearnIzone.Button" parent="Widget.MaterialComponents.Button">
+        <item name="android:backgroundTint">?attr/colorPrimary</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="cornerRadius">8dp</item>
+    </style>
+
+    <!-- Optionnel : style de texte pour hint -->
+    <style name="TextAppearance.App.TextInputHint" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:textColor">#9E9E9E</item>
+    </style>
+
+</resources>
