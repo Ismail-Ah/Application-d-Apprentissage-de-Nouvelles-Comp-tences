@@ -1,0 +1,9 @@
+<resources>
+    <!-- Custom Button Style -->
+    <style name="CustomButtonStyle" parent="Widget.AppCompat.Button">
+        <item name="android:backgroundTint">@null</item>
+        <item name="backgroundTint">@null</item>
+        <item name="android:backgroundTintMode">src_over</item>
+        <item name="android:stateListAnimator">@null</item> <!-- Disable Material elevation animations -->
+    </style>
+</resources>

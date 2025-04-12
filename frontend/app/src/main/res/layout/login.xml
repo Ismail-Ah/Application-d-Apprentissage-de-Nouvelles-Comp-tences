@@ -65,7 +65,7 @@
         app:boxStrokeColor="#FF6D00"
         app:boxStrokeWidth="1dp"
         app:boxStrokeWidthFocused="2dp"
-        app:boxCornerRadius="8dp"
+
         app:hintTextColor="#757575"
         app:errorEnabled="true">
 
@@ -94,7 +94,7 @@
         app:boxStrokeColor="#FF6D00"
         app:boxStrokeWidth="1dp"
         app:boxStrokeWidthFocused="2dp"
-        app:boxCornerRadius="8dp"
+
         app:hintTextColor="#757575"
         app:errorEnabled="true"
         app:passwordToggleEnabled="true"
