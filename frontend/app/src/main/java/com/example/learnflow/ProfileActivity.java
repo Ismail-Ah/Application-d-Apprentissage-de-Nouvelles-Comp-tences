@@ -12,13 +12,13 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
+        setContentView(R.layout.profile);
 
         // Set up bottom navigation
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setSelectedItemId(R.id.nav_profile); // Highlight profile icon
 
-        bottomNav.setOnNavigationItemSelectedListener(item -> {
+        /*bottomNav.setOnNavigationItemSelectedListener(item -> {
             switch (item.getItemId()) {
                 case R.id.nav_dashboard:
                     startActivity(new Intent(this, DashboardActivity.class));
@@ -33,6 +33,6 @@ public class ProfileActivity extends AppCompatActivity {
                     return true;
             }
             return false;
-        });
+        });*/
     }
 }
