@@ -9,34 +9,30 @@ import android.widget.TextView;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
-public class MainActivity extends AppCompatActivity {
+public class SignUpActivity extends AppCompatActivity {
 
-
-    Button btn_login;
-    TextView txt_register;
-
+    private TextView txt_login;
+    private Button btn_continue;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_main);
-
-        btn_login = findViewById(R.id.btn_login_h);
-        txt_register = findViewById(R.id.txt_register_h);
-        btn_login.setOnClickListener(new View.OnClickListener() {
+        setContentView(R.layout.activity_sign_up);
+        txt_login = findViewById(R.id.txt_login_s);
+        btn_continue = findViewById(R.id.btn_continue);
+        txt_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this,LoginActivity.class);
+                Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
                 startActivity(intent);
             }
         });
-        txt_register.setOnClickListener(new View.OnClickListener() {
+        btn_continue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this,SignUpActivity.class);
+                Intent intent = new Intent(SignUpActivity.this, SignUpActivity2.class);
                 startActivity(intent);
             }
         });
-
     }
 }
