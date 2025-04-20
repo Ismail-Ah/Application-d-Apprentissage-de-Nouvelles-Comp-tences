@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="8dp"
+    android:layout_marginStart="32dp">
+
+    <!-- Element Icon (Text, Quiz, or Video) -->
+    <ImageView
+        android:id="@+id/element_icon"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:tint="#FFFFFF"
+        android:src="@drawable/ic_text" />
+
+    <!-- Element Title -->
+    <TextView
+        android:id="@+id/element_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="Element Title"
+        android:textColor="#FFFFFF"
+        android:textSize="14sp" />
+</LinearLayout>

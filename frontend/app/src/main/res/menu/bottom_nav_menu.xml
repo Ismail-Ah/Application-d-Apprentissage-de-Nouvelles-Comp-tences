@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/nav_dashboard"
-        android:icon="@drawable/dashboard_24px"
-        android:title="@string/dashboard"/>
 
+        android:id="@+id/nav_home"
+        android:icon="@android:drawable/ic_lock_lock"
+        android:title="Accueil" />
     <item
-        android:id="@+id/nav_stats"
-        android:icon="@drawable/local_library_24px"
-        android:title="@string/statistics"/>
-
+        android:id="@+id/nav_courses"
+        android:icon="@android:drawable/ic_menu_agenda"
+        android:title="Cours" />
     <item
         android:id="@+id/nav_profile"
-        android:icon="@drawable/person_24px"
-        android:title="@string/profile"/>
+        android:icon="@android:drawable/ic_menu_manage"
+        android:title="Profil" />
 </menu>
