@@ -1,0 +1,30 @@
+# ========== Android Studio / IntelliJ ==========
+.idea/
+*.iml
+.gradle/
+build/
+*/build/
+captures/
+.externalNativeBuild/
+.cxx/
+
+# ========== Local Configuration ==========
+local.properties
+
+# ========== OS Files ==========
+.DS_Store
+Thumbs.db
+
+# ========== Log Files ==========
+*.log
+
+# ========== Keystore Files ==========
+*.jks
+*.keystore
+
+# ========== Google Services (Firebase, etc) ==========
+google-services.json
+app/google-services.json
+
+# ========== Env Files ==========
+.env
