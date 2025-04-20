@@ -27,7 +27,7 @@
             </intent-filter>
         </activity>
 
-        <!-- Other Activities from HEAD -->
+        <!-- Other Activities -->
         <activity
             android:name=".SignUpActivity2"
             android:exported="false" />
@@ -40,8 +40,6 @@
         <activity
             android:name=".ProfileActivity"
             android:exported="false" />
-
-        <!-- Activities from origin/Aymanfront2 -->
         <activity
             android:name=".LearnActivity"
             android:exported="false" />
