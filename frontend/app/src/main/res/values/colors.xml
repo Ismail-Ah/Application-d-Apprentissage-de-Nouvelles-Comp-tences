@@ -4,4 +4,9 @@
     <color name="white">#FFFFFFFF</color>
     <color name="red">#D81600</color>
     <color name="purple">#521C98</color>
+    <color name="orange">#FF6D00</color>
+    <color name="green">#167464</color>
+    <color name="selected_domain_color">#E3F2FD</color>
+
+
 </resources>

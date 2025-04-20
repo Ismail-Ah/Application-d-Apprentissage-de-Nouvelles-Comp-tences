@@ -20,17 +20,19 @@ public class ProfileActivity extends AppCompatActivity {
 
         bottomNav.setOnNavigationItemSelectedListener(item -> {
             switch (item.getItemId()) {
-                case R.id.nav_dashboard:
+                /*"""case R.id.nav_dashboard:
                     startActivity(new Intent(this, DashboardActivity.class));
                     overridePendingTransition(0, 0);
                     return true;
                 case R.id.nav_stats:
                     startActivity(new Intent(this, StatsActivity.class));
                     overridePendingTransition(0, 0);
-                    return true;
+                    return true;"""
                 case R.id.nav_profile:
                     // Already on profile page
                     return true;
+
+                 */
             }
             return false;
         });
