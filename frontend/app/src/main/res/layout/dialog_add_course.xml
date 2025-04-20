@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <EditText
+        android:id="@+id/edit_course_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Course Title"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#B0BEC5" />
+
+    <EditText
+        android:id="@+id/edit_course_category"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:hint="Category"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#B0BEC5" />
+
+    <EditText
+        android:id="@+id/edit_course_duration"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:hint="Duration (e.g., 12h 20min)"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#B0BEC5" />
+
+    <EditText
+        android:id="@+id/edit_course_rating"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:hint="Rating (e.g., 4.9)"
+        android:inputType="numberDecimal"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#B0BEC5" />
+</LinearLayout>

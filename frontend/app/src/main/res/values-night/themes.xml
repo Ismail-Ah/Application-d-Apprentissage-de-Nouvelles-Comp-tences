@@ -1,7 +1,8 @@
+
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Dark theme -->
-    <style name="Theme.Learnizone" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="Base.Theme.LearnFlow" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Primary brand color -->
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryVariant">@color/primary_dark</item>
@@ -21,5 +22,9 @@
         <!-- Text colors -->
         <item name="android:textColorPrimary">@color/text_primary_dark</item>
         <item name="android:textColorSecondary">@color/text_secondary_dark</item>
+
+        <!-- Customize your dark theme here. -->
+        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+
     </style>
 </resources>

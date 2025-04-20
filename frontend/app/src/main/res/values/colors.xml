@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <color name="primary">#167464</color>
     <color name="primary_dark">#115A4E</color>
     <color name="secondary">#FF6D00</color>
@@ -28,4 +29,12 @@
     <color name="background_dark">#121212</color>
     <color name="text_primary_dark">#FFFFFF</color>
     <color name="text_secondary_dark">#B3B3B3</color>
+
+    <color name="red">#D81600</color>
+    <color name="purple">#521C98</color>
+    <color name="orange">#FF6D00</color>
+    <color name="green">#167464</color>
+    <color name="selected_domain_color">#E3F2FD</color>
+
+
 </resources>

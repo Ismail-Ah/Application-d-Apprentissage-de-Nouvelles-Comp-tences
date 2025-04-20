@@ -1,5 +1,11 @@
 [versions]
-agp = "8.8.1"
+
+# abedlouahed agp = "8.8.1"
+
+agp = "8.7.3"
+
+#ayman agp = "8.5.1"
+
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
