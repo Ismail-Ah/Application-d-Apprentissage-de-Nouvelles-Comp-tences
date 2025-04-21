@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="100dp"
+    android:height="100dp"
+    android:viewportWidth="100"
+    android:viewportHeight="100">
+    <!-- Simplified Python logo (blue and yellow snakes) -->
+    <path
+        android:fillColor="#FF3776AB"
+        android:pathData="M50,20c-10,0-18,8-18,18v24c0,10 8,18 18,18s18-8 18-18V38c0-10-8-18-18-18zM50,62c-5,0-9-4-9-9s4-9 9-9 9,4 9,9-4,9-9,9z" />
+    <path
+        android:fillColor="#FFFFD241"
+        android:pathData="M50,20c10,0 18,8 18,18v24c0,10-8,18-18,18s-18-8-18-18V38c0-10 8-18 18-18zM50,38c-5,0-9,4-9,9s4,9 9,9 9-4 9-9-4-9-9-9z" />
+</vector>

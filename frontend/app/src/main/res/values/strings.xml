@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">LearnIzone</string>
+    <string name="navigation_learn">Accueil</string>
+    <string name="navigation_courses">Cours</string>
+    <string name="navigation_profile">Profil</string>
+    <string name="login_welcome">Bienvenue !</string>
+    <string name="login_subtitle">Nous sommes ravis de vous revoir !</string>
+    <string name="email_hint">Email</string>
+    <string name="password_hint">Mot de passe</string>
+    <string name="forgot_password">Mot de passe oublié ?</string>
+    <string name="login_button">SE CONNECTER</string>
+    <string name="no_account">Vous n\'avez pas de compte ?</string>
+    <string name="signup_link">S\'inscrire</string>
+    <string name="signup_title">Créer un compte</string>
+    <string name="signup_subtitle">Commencez votre parcours d\'apprentissage dès aujourd\'hui</string>
+    <string name="fullname_hint">Nom complet</string>
+    <string name="signup_button">CONTINUER</string>
+    <string name="have_account">Vous avez déjà un compte ?</string>
+    <string name="login_link">Se connecter</string>
+    <string name="continue_learning">Continuer l\'apprentissage</string>
+    <string name="recommended_for_you">Recommandé pour vous</string>
+    <string name="popular_courses">Cours populaires</string>
+    <string name="see_all">Voir tout</string>
+    <string name="course_details">Détails du cours</string>
+    <string name="description">Description</string>
+    <string name="what_you_learn">Ce que vous apprendrez</string>
+    <string name="modules">Modules</string>
+    <string name="enroll">S\'INSCRIRE</string>
+    <string name="continue_course">CONTINUER</string>
+    <string name="profile_edit">Éditer le profil</string>
+    <string name="profile_courses">COURS</string>
+    <string name="profile_hours">HEURES</string>
+    <string name="profile_streak">JOURS CONSÉCUTIFS</string>
+    <string name="settings">Paramètres</string>
+    <string name="settings_account">Paramètres du compte</string>
+    <string name="settings_notifications">Notifications</string>
+    <string name="settings_dark_mode">Mode sombre</string>
+    <string name="settings_logout">Déconnexion</string>
+    <string name="search_hint">Rechercher des cours...</string>
+    <string name="categories">Catégories</string>
+    <string name="filter">Filtrer</string>
+    <string name="sort">Trier</string>
+    <string name="dashboard">Dashboard</string>
+
+
+
+    <string name="profile_picture">Profile Picture</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="courses">Courses</string>
+    <string name="hours">Hours</string>
+    <string name="day_streak">Day Streak</string>
+    <string name="account_settings">Account Settings</string>
+    <string name="notifications">Notifications</string>
+    <string name="dark_mode">Dark Mode</string>
+    <string name="logout">Logout</string>
+    <string name="statistics">Statistics</string>
+    <string name="profile">Profile</string>
+</resources>
