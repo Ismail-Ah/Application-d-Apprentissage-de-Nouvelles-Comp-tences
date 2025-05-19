@@ -2,133 +2,119 @@ package com.example.learnizone;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.TextView;
+import android.text.TextUtils;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.learnizone.activities.TeacherDashboardActivity;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 public class SignUpActivity extends AppCompatActivity {
-
+    private TextInputEditText nameInput, emailInput, passwordInput;
+    private RadioGroup roleRadioGroup;
+    private MaterialButton signUpButton;
     private FirebaseAuth auth;
     private FirebaseFirestore db;
-    private TextView txt_login;
-    private Button btn_continue;
-    private CheckBox termsCheckbox;
 
-    private TextInputEditText fullNameInput, emailInput, passwordInput, confirmPasswordInput;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
-
+        setContentView(R.layout.activity_sign_up);
 
         // Initialize Firebase
         auth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
-        setContentView(R.layout.activity_sign_up);
-        txt_login = findViewById(R.id.txt_login_s);
-        btn_continue = findViewById(R.id.btn_continue);
-        fullNameInput = findViewById(R.id.full_name_input);
+        // Initialize views
+        nameInput = findViewById(R.id.full_name_input);
         emailInput = findViewById(R.id.email_input);
         passwordInput = findViewById(R.id.password_input);
-        confirmPasswordInput = findViewById(R.id.confirm_password_input);
-        termsCheckbox = findViewById(R.id.terms_checkbox);
-        txt_login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
-                startActivity(intent);
-            }
-        });
-        btn_continue.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(validateInputs()){
-                    registerUser();
-                }
-            }
+        roleRadioGroup = findViewById(R.id.roleRadioGroup);
+        signUpButton = findViewById(R.id.btn_continue);
+
+        // Set up click listeners
+        signUpButton.setOnClickListener(v -> signUp());
+        findViewById(R.id.txt_login_s).setOnClickListener(v -> {
+            startActivity(new Intent(SignUpActivity.this, LoginActivity.class));
+            finish();
         });
     }
 
-    public boolean validateInputs(){
-        String fullName = fullNameInput.getText().toString().trim();
+    private void signUp() {
+        String name = nameInput.getText().toString().trim();
         String email = emailInput.getText().toString().trim();
         String password = passwordInput.getText().toString().trim();
-        String confirmPassword = confirmPasswordInput.getText().toString().trim();
-
-        // Reset errors
-        ((TextInputLayout) findViewById(R.id.full_name_input_layout)).setError(null);
-        ((TextInputLayout) findViewById(R.id.email_input_layout)).setError(null);
-        ((TextInputLayout) findViewById(R.id.password_input_layout)).setError(null);
-        ((TextInputLayout) findViewById(R.id.confirm_password_input_layout)).setError(null);
+        String role = roleRadioGroup.getCheckedRadioButtonId() == R.id.studentRadio ? "etudiant" : "professeur";
 
         // Validate inputs
-        if (fullName.isEmpty()) {
-            ((TextInputLayout) findViewById(R.id.full_name_input_layout)).setError("Full name is required");
-            return false;
+        if (TextUtils.isEmpty(name)) {
+            nameInput.setError("Name is required");
+            return;
         }
-        if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            ((TextInputLayout) findViewById(R.id.email_input_layout)).setError("Valid email is required");
-            return false;
+        if (TextUtils.isEmpty(email)) {
+            emailInput.setError("Email is required");
+            return;
+        }
+        if (TextUtils.isEmpty(password)) {
+            passwordInput.setError("Password is required");
+            return;
         }
         if (password.length() < 6) {
-            ((TextInputLayout) findViewById(R.id.password_input_layout)).setError("Password must be at least 6 characters");
-            return false;
+            passwordInput.setError("Password must be at least 6 characters");
+            return;
         }
-        if (!password.equals(confirmPassword)) {
-            ((TextInputLayout) findViewById(R.id.confirm_password_input_layout)).setError("Passwords do not match");
-            return false;
-        }
-        if (!termsCheckbox.isChecked()) {
-            Toast.makeText(this, "Please agree to the Terms of Service", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        return true;
-    }
 
-    private void registerUser() {
-        String fullName = fullNameInput.getText().toString().trim();
-        String email = emailInput.getText().toString().trim();
-        String password = passwordInput.getText().toString().trim();
+        // Show loading state
+        signUpButton.setEnabled(false);
+        signUpButton.setText("Creating account...");
 
+        // Create user with Firebase Auth
         auth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(task -> {
+                .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
+                        // Create user document in Firestore
                         String userId = auth.getCurrentUser().getUid();
                         Map<String, Object> user = new HashMap<>();
-                        user.put("fullName", fullName);
+                        user.put("name", name);
                         user.put("email", email);
-                        user.put("selectedDomains", Collections.emptyList());
+                        user.put("role", role);
 
                         db.collection("users").document(userId)
                                 .set(user)
                                 .addOnSuccessListener(aVoid -> {
-                                    Toast.makeText(SignUpActivity.this, "Registration successful", Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(SignUpActivity.this, SignUpActivity2.class);
-                                    intent.putExtra("USER_ID", userId);
+                                    // Redirect based on role
+                                    Intent intent;
+                                    if (role.equals("etudiant")) {
+                                        intent = new Intent(SignUpActivity.this, MainActivity2.class);
+                                    } else {
+                                        intent = new Intent(SignUpActivity.this, TeacherDashboardActivity.class);
+                                    }
                                     startActivity(intent);
                                     finish();
                                 })
                                 .addOnFailureListener(e -> {
-                                    Toast.makeText(SignUpActivity.this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(SignUpActivity.this, "Error saving user data: " + e.getMessage(),
+                                            Toast.LENGTH_SHORT).show();
+                                    resetSignUpButton();
                                 });
                     } else {
-                        ((TextInputLayout) findViewById(R.id.email_input_layout)).setError(task.getException().getMessage());
+                        Toast.makeText(SignUpActivity.this, "Authentication failed: " + task.getException().getMessage(),
+                                Toast.LENGTH_SHORT).show();
+                        resetSignUpButton();
                     }
                 });
+    }
+
+    private void resetSignUpButton() {
+        signUpButton.setEnabled(true);
+        signUpButton.setText("Sign Up");
     }
 }

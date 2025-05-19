@@ -2,107 +2,105 @@ package com.example.learnizone;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.TextView;
+import android.text.TextUtils;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.learnizone.activities.TeacherDashboardActivity;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class LoginActivity extends AppCompatActivity {
-
+    private TextInputEditText emailInput;
+    private TextInputEditText passwordInput;
+    private MaterialButton loginButton;
     private FirebaseAuth auth;
-    private TextView txtSignup;
-    private TextInputEditText editTextEmail, editTextPassword;
-    private MaterialButton buttonLogin;
+    private FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_login);
 
         // Initialize Firebase
         auth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
 
         // Initialize views
-        txtSignup = findViewById(R.id.txt_register_l);
-        editTextEmail = findViewById(R.id.email_input);
-        editTextPassword = findViewById(R.id.password_input);
-        buttonLogin = findViewById(R.id.login_button);
+        emailInput = findViewById(R.id.email_input);
+        passwordInput = findViewById(R.id.password_input);
+        loginButton = findViewById(R.id.login_button);
 
-        // Sign up click listener
-        txtSignup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(LoginActivity.this, SignUpActivity.class));
-            }
-        });
-
-        // Login button click listener
-        buttonLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String email = editTextEmail.getText().toString().trim();
-                String password = editTextPassword.getText().toString().trim();
-
-                if (validateInputs(email, password)) {
-                    loginUser(email, password);
-                }
-            }
-        });
-
-        // Forgot password click listener
-        findViewById(R.id.forgot_password_text).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String email = editTextEmail.getText().toString().trim();
-                if (!email.isEmpty() && android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                    auth.sendPasswordResetEmail(email)
-                            .addOnSuccessListener(aVoid -> {
-                                Toast.makeText(LoginActivity.this, "Password reset email sent", Toast.LENGTH_SHORT).show();
-                            })
-                            .addOnFailureListener(e -> {
-                                Toast.makeText(LoginActivity.this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                            });
-                } else {
-                    ((TextInputLayout) findViewById(R.id.email_input_layout)).setError("Enter a valid email");
-                }
-            }
+        // Set up click listeners
+        loginButton.setOnClickListener(v -> login());
+        findViewById(R.id.txt_register_l).setOnClickListener(v -> {
+            startActivity(new Intent(LoginActivity.this, SignUpActivity.class));
+            finish();
         });
     }
 
-    private boolean validateInputs(String email, String password) {
-        // Reset errors
-        ((TextInputLayout) findViewById(R.id.email_input_layout)).setError(null);
-        ((TextInputLayout) findViewById(R.id.password_input_layout)).setError(null);
+    private void login() {
+        String email = emailInput.getText().toString().trim();
+        String password = passwordInput.getText().toString().trim();
 
         // Validate inputs
-        if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            ((TextInputLayout) findViewById(R.id.email_input_layout)).setError("Valid email is required");
-            return false;
+        if (TextUtils.isEmpty(email)) {
+            emailInput.setError("Email is required");
+            return;
         }
-        if (password.isEmpty()) {
-            ((TextInputLayout) findViewById(R.id.password_input_layout)).setError("Password is required");
-            return false;
+        if (TextUtils.isEmpty(password)) {
+            passwordInput.setError("Password is required");
+            return;
         }
-        return true;
-    }
 
-    private void loginUser(String email, String password) {
+        // Show loading state
+        loginButton.setEnabled(false);
+        loginButton.setText("Connexion en cours...");
+
+        // Authenticate user
         auth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(task -> {
+                .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
-                        startActivity(new Intent(LoginActivity.this, MainActivity2.class));
-                        finish();
+                        // Get user role from Firestore
+                        String userId = auth.getCurrentUser().getUid();
+                        db.collection("users").document(userId)
+                                .get()
+                                .addOnSuccessListener(documentSnapshot -> {
+                                    String role = documentSnapshot.getString("role");
+                                    if (role != null) {
+                                        // Redirect based on role
+                                        Intent intent;
+                                        if (role.equals("etudiant")) {
+                                            intent = new Intent(LoginActivity.this, MainActivity2.class);
+                                        } else {
+                                            intent = new Intent(LoginActivity.this, TeacherDashboardActivity.class);
+                                        }
+                                        startActivity(intent);
+                                        finish();
+                                    } else {
+                                        Toast.makeText(LoginActivity.this, "Error: User role not found",
+                                                Toast.LENGTH_SHORT).show();
+                                        resetLoginButton();
+                                    }
+                                })
+                                .addOnFailureListener(e -> {
+                                    Toast.makeText(LoginActivity.this, "Error: " + e.getMessage(),
+                                            Toast.LENGTH_SHORT).show();
+                                    resetLoginButton();
+                                });
                     } else {
-                        ((TextInputLayout) findViewById(R.id.email_input_layout)).setError(task.getException().getMessage());
+                        Toast.makeText(LoginActivity.this, "Authentication failed: " + task.getException().getMessage(),
+                                Toast.LENGTH_SHORT).show();
+                        resetLoginButton();
                     }
                 });
+    }
+
+    private void resetLoginButton() {
+        loginButton.setEnabled(true);
+        loginButton.setText("Se connecter");
     }
 }
