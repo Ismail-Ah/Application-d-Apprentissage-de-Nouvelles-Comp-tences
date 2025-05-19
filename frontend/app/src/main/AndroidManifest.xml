@@ -55,22 +55,42 @@
         </activity>
 
         <activity
-            android:name=".activities.SplashActivity"
-            android:exported="true">
+            android:name=".activities.CourseDetailActivity"
+            android:exported="true"
+           >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".activities.LoginActivity" />
-        <activity android:name=".activities.SignupActivity" />
-        <activity android:name=".activities.TeacherDashboardActivity" />
-        <activity android:name=".activities.StudentDashboardActivity" />
-        <activity android:name=".activities.CreateCourseActivity" />
-        <activity android:name=".activities.CourseSectionsActivity" />
-        <activity android:name=".activities.AddSubsectionActivity" />
-        <activity android:name=".activities.CourseDetailActivity" />
+        <activity
+            android:name=".LoginActivity"
+            android:exported="false"
+             />
+
+        <activity
+            android:name=".activities.TeacherDashboardActivity"
+            android:exported="false"
+             />
+
+        <activity
+            android:name=".activities.CreateCourseActivity"
+            android:exported="false"
+            />
+
+
+
+        <activity
+            android:name=".activities.AddSubsectionActivity"
+            android:exported="false"
+            />
+
+        <activity
+            android:name=".activities.CourseSectionsActivity"
+            android:exported="false"
+           />
+
     </application>
 
 </manifest>

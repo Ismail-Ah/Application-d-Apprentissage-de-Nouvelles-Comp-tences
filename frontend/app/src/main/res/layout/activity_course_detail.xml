@@ -60,7 +60,7 @@
                 tools:text="Programmation" />
 
             <TextView
-                android:id="@+id/course_title"
+                android:id="@+id/courseTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -160,7 +160,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/course_description"
+                android:id="@+id/courseDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -210,4 +210,13 @@
         android:paddingVertical="12dp"
         android:text="@string/enroll"
         app:cornerRadius="8dp" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_add_section"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:contentDescription="Add new section"
+        app:srcCompat="@drawable/ic_add"/>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

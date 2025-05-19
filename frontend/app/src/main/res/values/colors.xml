@@ -1,22 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="primary">#167464</color>
-    <color name="primary_dark">#115A4E</color>
-    <color name="secondary">#FF6D00</color>
-    <color name="secondary_dark">#E56200</color>
+    <color name="primary">#2196F3</color>
+    <color name="primary_dark">#1976D2</color>
+    <color name="primary_light">#BBDEFB</color>
+    <color name="accent">#FF4081</color>
+    <color name="primary_text">#212121</color>
+    <color name="secondary_text">#757575</color>
+    <color name="icons">#FFFFFF</color>
+    <color name="divider">#BDBDBD</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="gray_200">#EEEEEE</color>
+    <color name="gray_600">#757575</color>
+    <color name="gray_800">#424242</color>
+    <color name="secondary">#FFC107</color>
+    <color name="secondary_dark">#FFA000</color>
+    <color name="secondary_light">#FFECB3</color>
     <color name="gray_50">#FAFAFA</color>
     <color name="gray_100">#F5F5F5</color>
-    <color name="gray_200">#EEEEEE</color>
+
     <color name="gray_300">#E0E0E0</color>
     <color name="gray_400">#BDBDBD</color>
     <color name="gray_500">#9E9E9E</color>
-    <color name="gray_600">#757575</color>
-    <color name="gray_700">#616161</color>
-    <color name="gray_800">#424242</color>
-    <color name="gray_900">#212121</color>
-    <color name="white">#FFFFFF</color>
-    <color name="black">#000000</color>
 
+    <color name="gray_700">#616161</color>
+
+    <color name="gray_900">#212121</color>
     <!-- Adding the background color -->
     <color name="background">#FAFAFA</color>
 

@@ -37,7 +37,7 @@ public class LoginActivity extends AppCompatActivity {
         // Set up click listeners
         loginButton.setOnClickListener(v -> login());
         findViewById(R.id.txt_register_l).setOnClickListener(v -> {
-            startActivity(new Intent(LoginActivity.this, SignUpActivity.class));
+                startActivity(new Intent(LoginActivity.this, SignUpActivity.class));
             finish();
         });
     }
@@ -79,7 +79,7 @@ public class LoginActivity extends AppCompatActivity {
                                             intent = new Intent(LoginActivity.this, TeacherDashboardActivity.class);
                                         }
                                         startActivity(intent);
-                                        finish();
+                        finish();
                                     } else {
                                         Toast.makeText(LoginActivity.this, "Error: User role not found",
                                                 Toast.LENGTH_SHORT).show();
