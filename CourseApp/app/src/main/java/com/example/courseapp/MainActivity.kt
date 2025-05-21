@@ -26,14 +26,17 @@ import com.example.courseapp.viewmodel.AuthViewModel
 import com.example.courseapp.viewmodel.CourseViewModel
 import com.example.courseapp.viewmodel.CreditCardViewModel
 import java.util.concurrent.TimeUnit
-
 import com.example.courseapp.viewmodel.NoteViewModel
-
 
 class MainActivity : ComponentActivity() {
     private val TAG = "MainActivity"
     private val handler = Handler(Looper.getMainLooper())
     private val engagementCheckInterval = TimeUnit.MINUTES.toMillis(1) // Check every 1 minute
+
+    private lateinit var authViewModel: AuthViewModel
+    private lateinit var courseViewModel: CourseViewModel
+    private lateinit var creditCardViewModel: CreditCardViewModel
+    private lateinit var noteViewModel: NoteViewModel
 
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -69,11 +72,11 @@ class MainActivity : ComponentActivity() {
         override fun run() {
             try {
                 // Get the CourseViewModel instance
-                val app = application as? eLearningApplication
+                val app = application as? CourseApplication
                 if (app != null) {
                     app.courseViewModel.checkUserEngagement()
                 } else {
-                    Log.e(TAG, "Application is not an instance of eLearningApplication")
+                    Log.e(TAG, "Application is not an instance of CourseApplication")
                 }
                 
                 // Schedule the next check
@@ -87,6 +90,12 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         
+        // Initialize ViewModels
+        authViewModel = AuthViewModel()
+        courseViewModel = (application as CourseApplication).courseViewModel
+        creditCardViewModel = CreditCardViewModel()
+        noteViewModel = NoteViewModel()
+        
         // Request notification permission
         checkNotificationPermission()
         
@@ -99,12 +108,8 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    val application = LocalContext.current.applicationContext as Application
                     val navController = rememberNavController()
-                    val authViewModel = remember { AuthViewModel() }
-                    val courseViewModel = remember { CourseViewModel(application) }
-                    val creditCardViewModel = remember { CreditCardViewModel() }
-                    val noteViewModel = remember { NoteViewModel() }
+                    val context = LocalContext.current
 
                     NavGraph(
                         navController = navController,

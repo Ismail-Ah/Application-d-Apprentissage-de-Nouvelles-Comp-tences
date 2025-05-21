@@ -208,5 +208,24 @@ fun NavGraph(
                 authViewModel = authViewModel
             )
         }
+        composable(Screen.AddCourse.route) {
+            if (user != null) {
+                AddCourseScreen(
+                    navController = navController,
+                    courseViewModel = courseViewModel,
+                    user = user
+                )
+            }
+        }
+        composable(Screen.InstructorDashboard.route) {
+            if (user != null && user.role == UserRole.INSTRUCTOR) {
+                InstructorDashboardScreen(
+                    navController = navController,
+                    user = user,
+                    courseViewModel = courseViewModel,
+                    authViewModel = authViewModel
+                )
+            }
+        }
     }
 }

@@ -6,6 +6,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.*
+import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -19,11 +20,9 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.courseapp.model.User
+import com.example.courseapp.model.UserRole
 import com.example.courseapp.navigation.Screen
 import com.example.courseapp.viewmodel.AuthViewModel
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material.icons.automirrored.filled.ExitToApp
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -38,9 +37,8 @@ fun NavigationDrawer(
     val drawerState = rememberDrawerState(if (isDrawerOpen) DrawerValue.Open else DrawerValue.Closed)
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp.dp
-    val drawerWidth = (screenWidth * 0.65f) // Navbar Takes 50% of screen width
+    val drawerWidth = (screenWidth * 0.65f)
     
-    // Update drawer state when isDrawerOpen changes
     LaunchedEffect(isDrawerOpen) {
         if (isDrawerOpen) {
             drawerState.open()
@@ -95,29 +93,67 @@ fun NavigationDrawer(
                     color = MaterialTheme.colorScheme.outline.copy(alpha = 0.2f)
                 )
 
-                // Navigation Items
-                NavigationDrawerItem(
-                    icon = { Icon(Icons.Filled.Home, contentDescription = "Home") },
-                    label = { Text("Home") },
-                    selected = false,
-                    onClick = {
-                        navController.navigate(Screen.Home.route)
-                        onDrawerStateChange(false)
-                    },
-                    modifier = Modifier.padding(vertical = 4.dp)
-                )
+                // Navigation Items based on user role
+                if (user.role == UserRole.INSTRUCTOR) {
+                    // Instructor Menu Items
+                    NavigationDrawerItem(
+                        icon = { Icon(Icons.Filled.Home, contentDescription = "My Courses") },
+                        label = { Text("My Courses") },
+                        selected = false,
+                        onClick = {
+                            navController.navigate(Screen.InstructorDashboard.route)
+                            onDrawerStateChange(false)
+                        },
+                        modifier = Modifier.padding(vertical = 4.dp)
+                    )
 
-                NavigationDrawerItem(
-                    icon = { Icon(Icons.Outlined.Star, contentDescription = "My Courses") },
-                    label = { Text("My Courses") },
-                    selected = false,
-                    onClick = {
-                        navController.navigate(Screen.MyCourses.route)
-                        onDrawerStateChange(false)
-                    },
-                    modifier = Modifier.padding(vertical = 4.dp)
-                )
+                    NavigationDrawerItem(
+                        icon = { Icon(Icons.Outlined.AddCircle, contentDescription = "Add Course") },
+                        label = { Text("Add Course") },
+                        selected = false,
+                        onClick = {
+                            navController.navigate(Screen.AddCourse.route)
+                            onDrawerStateChange(false)
+                        },
+                        modifier = Modifier.padding(vertical = 4.dp)
+                    )
+                } else {
+                    // Student Menu Items
+                    NavigationDrawerItem(
+                        icon = { Icon(Icons.Filled.Search, contentDescription = "Discover") },
+                        label = { Text("Discover") },
+                        selected = false,
+                        onClick = {
+                            navController.navigate(Screen.Home.route)
+                            onDrawerStateChange(false)
+                        },
+                        modifier = Modifier.padding(vertical = 4.dp)
+                    )
 
+                    NavigationDrawerItem(
+                        icon = { Icon(Icons.Filled.Home, contentDescription = "My Courses") },
+                        label = { Text("My Courses") },
+                        selected = false,
+                        onClick = {
+                            navController.navigate(Screen.MyCourses.route)
+                            onDrawerStateChange(false)
+                        },
+                        modifier = Modifier.padding(vertical = 4.dp)
+                    )
+
+                    NavigationDrawerItem(
+                        icon = { Icon(Icons.Filled.AccountBox, contentDescription = "Progress") },
+                        label = { Text("Progress") },
+                        selected = false,
+                        onClick = {
+                            navController.navigate(Screen.Progress.route)
+                            onDrawerStateChange(false)
+                        },
+                        modifier = Modifier.padding(vertical = 4.dp)
+                    )
+                }
+
+                // Common Menu Items for both roles
                 NavigationDrawerItem(
                     icon = { Icon(Icons.Filled.Settings, contentDescription = "Settings") },
                     label = { Text("Settings") },

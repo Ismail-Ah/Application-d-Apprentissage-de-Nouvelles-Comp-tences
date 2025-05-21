@@ -36,6 +36,7 @@ import com.example.courseapp.viewmodel.CourseViewModel
 import com.example.courseapp.viewmodel.AuthViewModel
 import com.example.courseapp.model.CourseSection
 import com.example.courseapp.model.Lesson
+import com.example.courseapp.model.UserRole
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -92,10 +93,7 @@ fun InstructorDashboardScreen(
                     navigationIcon = {
                         IconButton(
                             onClick = { showDrawer = !showDrawer },
-                            modifier = Modifier
-                                .padding(8.dp)
-                                .clip(CircleShape)
-                                .background(MaterialTheme.colorScheme.primaryContainer)
+                            modifier = Modifier.padding(8.dp)
                         ) {
                             Icon(
                                 imageVector = if (showDrawer) Icons.Default.Close else Icons.Default.Menu,
@@ -107,10 +105,7 @@ fun InstructorDashboardScreen(
                     actions = {
                         IconButton(
                             onClick = { showSearchBar = !showSearchBar },
-                            modifier = Modifier
-                                .padding(8.dp)
-                                .clip(CircleShape)
-                                .background(MaterialTheme.colorScheme.primaryContainer)
+                            modifier = Modifier.padding(8.dp)
                         ) {
                             Icon(
                                 imageVector = if (showSearchBar) Icons.Default.Close else Icons.Default.Search,
@@ -130,6 +125,37 @@ fun InstructorDashboardScreen(
                     ),
                     modifier = Modifier.shadow(4.dp)
                 )
+            },
+            bottomBar = {
+                NavigationBar(
+                    containerColor = MaterialTheme.colorScheme.surface,
+                    tonalElevation = 8.dp
+                ) {
+                    NavigationBarItem(
+                        selected = true,
+                        onClick = { /* Already on this screen */ },
+                        icon = {
+                            Icon(imageVector = Icons.Default.Home, contentDescription = "My Courses")
+                        },
+                        label = { Text("My Courses") }
+                    )
+                    NavigationBarItem(
+                        selected = false,
+                        onClick = { navController.navigate(Screen.AddCourse.route) },
+                        icon = {
+                            Icon(imageVector = Icons.Outlined.AddCircle, contentDescription = "Add Course")
+                        },
+                        label = { Text("Add") }
+                    )
+                    NavigationBarItem(
+                        selected = false,
+                        onClick = { navController.navigate(Screen.Profile.route) },
+                        icon = {
+                            Icon(imageVector = Icons.Default.Person, contentDescription = "Profile")
+                        },
+                        label = { Text("Profile") }
+                    )
+                }
             }
         ) { padding ->
             LazyColumn(
@@ -147,7 +173,8 @@ fun InstructorDashboardScreen(
                         course = course,
                         onClick = {
                             navController.navigate("course_editor/${course.id}")
-                        }
+                        },
+                        userRole = UserRole.INSTRUCTOR
                     )
                 }
             }

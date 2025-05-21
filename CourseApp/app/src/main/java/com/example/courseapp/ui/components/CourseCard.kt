@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.courseapp.model.Course
+import com.example.courseapp.model.UserRole
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -30,7 +31,8 @@ fun CourseCard(
     instructorName: String = "",
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    trailingContent: @Composable (() -> Unit)? = null
+    trailingContent: @Composable (() -> Unit)? = null,
+    userRole: UserRole = UserRole.STUDENT
 ) {
     // Pick a color based on course category or fallback
     val bgColor = when (course.category.lowercase()) {
@@ -71,7 +73,8 @@ fun CourseCard(
                 Column(
                     modifier = Modifier.weight(1f)
                 ) {
-                    // Progress pill
+                    // Progress pill - only show for students
+                    if (userRole == UserRole.STUDENT) {
                     Row(
                         modifier = Modifier
                             .clip(RoundedCornerShape(50))
@@ -106,7 +109,7 @@ fun CourseCard(
                             contentAlignment = Alignment.Center
                         ) {
                             Icon(
-                                imageVector = Icons.Default.ArrowForward,
+                                    imageVector = Icons.AutoMirrored.Filled.ArrowForward,
                                 contentDescription = "Go",
                                 tint = MaterialTheme.colorScheme.primary,
                                 modifier = Modifier.size(16.dp)
@@ -114,6 +117,7 @@ fun CourseCard(
                         }
                     }
                     Spacer(Modifier.height(12.dp))
+                    }
                     Text(
                         text = course.title,
                         style = MaterialTheme.typography.titleMedium.copy(
@@ -124,6 +128,8 @@ fun CourseCard(
                         color = Color.Black
                     )
                     Spacer(Modifier.height(4.dp))
+                    // Only show "by" text for students
+                    if (userRole == UserRole.STUDENT) {
                     Text(
                         text = "By $instructorName",
                         style = MaterialTheme.typography.bodySmall.copy(
@@ -133,6 +139,7 @@ fun CourseCard(
                         color = Color.Gray
                     )
                     Spacer(Modifier.height(12.dp))
+                    }
                     Row {
                         Surface(
                             shape = RoundedCornerShape(50),

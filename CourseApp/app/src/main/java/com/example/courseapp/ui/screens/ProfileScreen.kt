@@ -8,6 +8,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
+import androidx.compose.material.icons.outlined.AddCircle
+import androidx.compose.material.icons.outlined.Send
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -22,6 +24,7 @@ import com.example.courseapp.model.AuthState
 import com.example.courseapp.navigation.Screen
 import com.example.courseapp.viewmodel.AuthViewModel
 import coil.compose.AsyncImage
+import com.example.courseapp.model.UserRole
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -79,53 +82,127 @@ fun ProfileScreen(
                         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
                     ) {
                         Column {
-                            // Home Option
-                            ListItem(
-                                headlineContent = { Text("Home") },
-                                leadingContent = {
-                                    Icon(
-                                        Icons.Default.Home,
-                                        contentDescription = "Home",
-                                        tint = MaterialTheme.colorScheme.primary
-                                    )
-                                },
-                                trailingContent = {
-                                    Icon(
-                                        Icons.AutoMirrored.Filled.ArrowForward,
-                                        contentDescription = "Navigate",
-                                        tint = MaterialTheme.colorScheme.onSurfaceVariant
-                                    )
-                                },
-                                modifier = Modifier.clickable {
-                                    navController.navigate(Screen.Home.route)
-                                }
-                            )
-                            Divider()
+                            if (user.role == UserRole.INSTRUCTOR) {
+                                // My Courses Option for Instructors
+                                ListItem(
+                                    headlineContent = {
+                                        Text(
+                                            text = "My Courses",
+                                            style = MaterialTheme.typography.bodyLarge
+                                        )
+                                    },
+                                    leadingContent = {
+                                        Icon(
+                                            Icons.Default.Home,
+                                            contentDescription = "My Courses",
+                                            tint = MaterialTheme.colorScheme.primary
+                                        )
+                                    },
+                                    trailingContent = {
+                                        Icon(
+                                            Icons.AutoMirrored.Filled.ArrowForward,
+                                            contentDescription = "Navigate",
+                                            tint = MaterialTheme.colorScheme.onSurfaceVariant
+                                        )
+                                    },
+                                    modifier = Modifier.clickable {
+                                        navController.navigate(Screen.InstructorDashboard.route)
+                                    }
+                                )
+                                HorizontalDivider()
 
-                            // My Courses Option
-                            ListItem(
-                                headlineContent = { Text("My Courses") },
-                                leadingContent = {
-                                    Icon(
-                                        Icons.Default.ShoppingCart,
-                                        contentDescription = "My Courses",
-                                        tint = MaterialTheme.colorScheme.primary
-                                    )
-                                },
-                                trailingContent = {
-                                    Icon(
-                                        Icons.AutoMirrored.Filled.ArrowForward,
-                                        contentDescription = "Navigate",
-                                        tint = MaterialTheme.colorScheme.onSurfaceVariant
-                                    )
-                                },
-                                modifier = Modifier.clickable {
-                                    navController.navigate(Screen.MyCourses.route)
-                                }
-                            )
-                            Divider()
+                                // Add Course Option for Instructors
+                                ListItem(
+                                    headlineContent = { Text("Add Course") },
+                                    leadingContent = {
+                                        Icon(
+                                            Icons.Outlined.AddCircle,
+                                            contentDescription = "Add Course",
+                                            tint = MaterialTheme.colorScheme.primary
+                                        )
+                                    },
+                                    trailingContent = {
+                                        Icon(
+                                            Icons.AutoMirrored.Filled.ArrowForward,
+                                            contentDescription = "Navigate",
+                                            tint = MaterialTheme.colorScheme.onSurfaceVariant
+                                        )
+                                    },
+                                    modifier = Modifier.clickable {
+                                        navController.navigate(Screen.AddCourse.route)
+                                    }
+                                )
+                                HorizontalDivider()
+                            } else {
+                                // Student Options
+                                ListItem(
+                                    headlineContent = { Text("Discover") },
+                                    leadingContent = {
+                                        Icon(
+                                            Icons.Default.Home,
+                                            contentDescription = "Discover",
+                                            tint = MaterialTheme.colorScheme.primary
+                                        )
+                                    },
+                                    trailingContent = {
+                                        Icon(
+                                            Icons.AutoMirrored.Filled.ArrowForward,
+                                            contentDescription = "Navigate",
+                                            tint = MaterialTheme.colorScheme.onSurfaceVariant
+                                        )
+                                    },
+                                    modifier = Modifier.clickable {
+                                        navController.navigate(Screen.Home.route)
+                                    }
+                                )
+                                HorizontalDivider()
 
-                            // Settings Option
+                                ListItem(
+                                    headlineContent = { Text("My Courses") },
+                                    leadingContent = {
+                                        Icon(
+                                            Icons.Default.ShoppingCart,
+                                            contentDescription = "My Courses",
+                                            tint = MaterialTheme.colorScheme.primary
+                                        )
+                                    },
+                                    trailingContent = {
+                                        Icon(
+                                            Icons.AutoMirrored.Filled.ArrowForward,
+                                            contentDescription = "Navigate",
+                                            tint = MaterialTheme.colorScheme.onSurfaceVariant
+                                        )
+                                    },
+                                    modifier = Modifier.clickable {
+                                        navController.navigate(Screen.MyCourses.route)
+                                    }
+                                )
+                                HorizontalDivider()
+
+                                ListItem(
+                                    headlineContent = { Text("Progress") },
+                                    leadingContent = {
+                                        Icon(
+                                            Icons.Outlined.Send,
+                                            contentDescription = "Progress",
+                                            tint = MaterialTheme.colorScheme.primary
+                                        )
+                                    },
+                                    trailingContent = {
+                                        Icon(
+                                            Icons.AutoMirrored.Filled.ArrowForward,
+                                            contentDescription = "Navigate",
+                                            tint = MaterialTheme.colorScheme.onSurfaceVariant
+                                        )
+                                    },
+                                    modifier = Modifier.clickable {
+                                        navController.navigate(Screen.Progress.route)
+                                    }
+                                )
+                                HorizontalDivider()
+                            }
+
+                            // Settings Option (for both roles)
                             ListItem(
                                 headlineContent = { Text("Settings") },
                                 leadingContent = {
@@ -152,42 +229,79 @@ fun ProfileScreen(
                     Text("No user information available.")
                 }
             }
-            BottomNavigationBarProfile(navController)
+            BottomNavigationBarProfile(navController, user?.role)
         }
     }
 }
 
 @Composable
-private fun BottomNavigationBarProfile(navController: NavController) {
+private fun BottomNavigationBarProfile(navController: NavController, userRole: UserRole?) {
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
         NavigationBar(
             containerColor = MaterialTheme.colorScheme.surface,
             tonalElevation = 8.dp
         ) {
-            NavigationBarItem(
-                selected = false,
-                onClick = { navController.navigate(Screen.Home.route) },
-                icon = {
-                    Icon(imageVector = Icons.Default.Home, contentDescription = "Discover")
-                },
-                label = { Text("Discover") }
-            )
-            NavigationBarItem(
-                selected = false,
-                onClick = { navController.navigate(Screen.MyCourses.route) },
-                icon = {
-                    Icon(imageVector = Icons.Default.ShoppingCart, contentDescription = "My courses")
-                },
-                label = { Text("My courses") }
-            )
-            NavigationBarItem(
-                selected = true,
-                onClick = { navController.navigate(Screen.Profile.route) },
-                icon = {
-                    Icon(imageVector = Icons.Default.Person, contentDescription = "Profile")
-                },
-                label = { Text("Profile") }
-            )
+            if (userRole == UserRole.INSTRUCTOR) {
+                // Instructor Navigation Items
+                NavigationBarItem(
+                    selected = false,
+                    onClick = { navController.navigate(Screen.InstructorDashboard.route) },
+                    icon = {
+                        Icon(imageVector = Icons.Default.Home, contentDescription = "My Courses")
+                    },
+                    label = { Text("My Courses") }
+                )
+                NavigationBarItem(
+                    selected = false,
+                    onClick = { navController.navigate(Screen.AddCourse.route) },
+                    icon = {
+                        Icon(imageVector = Icons.Outlined.AddCircle, contentDescription = "Add Course")
+                    },
+                    label = { Text("Add") }
+                )
+                NavigationBarItem(
+                    selected = true,
+                    onClick = { /* Already on this screen */ },
+                    icon = {
+                        Icon(imageVector = Icons.Default.Person, contentDescription = "Profile")
+                    },
+                    label = { Text("Profile") }
+                )
+            } else {
+                // Student Navigation Items
+                NavigationBarItem(
+                    selected = false,
+                    onClick = { navController.navigate(Screen.Home.route) },
+                    icon = {
+                        Icon(imageVector = Icons.Default.Home, contentDescription = "Discover")
+                    },
+                    label = { Text("Discover") }
+                )
+                NavigationBarItem(
+                    selected = false,
+                    onClick = { navController.navigate(Screen.MyCourses.route) },
+                    icon = {
+                        Icon(imageVector = Icons.Default.ShoppingCart, contentDescription = "My courses")
+                    },
+                    label = { Text("My courses") }
+                )
+                NavigationBarItem(
+                    selected = false,
+                    onClick = { navController.navigate(Screen.Progress.route) },
+                    icon = {
+                        Icon(imageVector = Icons.Outlined.Send, contentDescription = "Progress")
+                    },
+                    label = { Text("Progress") }
+                )
+                NavigationBarItem(
+                    selected = true,
+                    onClick = { /* Already on this screen */ },
+                    icon = {
+                        Icon(imageVector = Icons.Default.Person, contentDescription = "Profile")
+                    },
+                    label = { Text("Profile") }
+                )
+            }
         }
     }
 } 

@@ -4,7 +4,7 @@ import android.app.Application
 import com.example.courseapp.viewmodel.CourseViewModel
 import com.google.firebase.FirebaseApp
 
-class eLearningApplication : Application() {
+class CourseApplication : Application() {
     lateinit var courseViewModel: CourseViewModel
         private set
 

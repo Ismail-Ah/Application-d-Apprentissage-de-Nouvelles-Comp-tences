@@ -17,6 +17,8 @@ import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.outlined.PlayArrow
 import androidx.compose.material.icons.outlined.ThumbUp
+import androidx.compose.material.icons.outlined.KeyboardArrowUp
+import androidx.compose.material.icons.outlined.Send
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -31,6 +33,7 @@ import androidx.navigation.NavController
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.courseapp.model.AuthState
 import com.example.courseapp.model.Course
+import com.example.courseapp.model.UserRole
 import com.example.courseapp.navigation.Screen
 import com.example.courseapp.ui.components.CourseCard
 import com.example.courseapp.ui.components.NavigationDrawer
@@ -50,7 +53,7 @@ fun HomeScreen(
     var searchQuery by remember { mutableStateOf("") }
     var showSearchBar by remember { mutableStateOf(false) }
     var showCategoryDialog by remember { mutableStateOf(false) }
-    var selectedCategory by remember { mutableStateOf("") }
+    var selectedCategory by remember { mutableStateOf<String?>(null) }
     
     val courses by courseViewModel.courses.collectAsState(emptyList())
     val enrolledCourses by courseViewModel.enrolledCourses.collectAsState(emptyList())
@@ -63,7 +66,7 @@ fun HomeScreen(
             (searchQuery.isBlank() || course.title.contains(searchQuery, ignoreCase = true) ||
                 course.instructor.contains(searchQuery, ignoreCase = true) ||
                 course.category.contains(searchQuery, ignoreCase = true)) &&
-            (selectedCategory.isBlank() || course.category == selectedCategory)
+            (selectedCategory == null || course.category == selectedCategory)
         }
     }
 
@@ -98,15 +101,26 @@ fun HomeScreen(
                     TopAppBar(
                         title = { 
                             if (showSearchBar) {
-                                TextField(
+                                // Search Bar
+                                OutlinedTextField(
                                     value = searchQuery,
                                     onValueChange = { searchQuery = it },
-                                    modifier = Modifier.fillMaxWidth(),
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(horizontal = 16.dp),
                                     placeholder = { Text("Search courses...") },
+                                    leadingIcon = {
+                                        Icon(
+                                            Icons.Default.Search,
+                                            contentDescription = "Search",
+                                            tint = MaterialTheme.colorScheme.onSurfaceVariant
+                                        )
+                                    },
                                     singleLine = true,
-                                    colors = TextFieldDefaults.colors(
-                                        focusedContainerColor = MaterialTheme.colorScheme.surface,
-                                        unfocusedContainerColor = MaterialTheme.colorScheme.surface
+                                    shape = RoundedCornerShape(12.dp),
+                                    colors = OutlinedTextFieldDefaults.colors(
+                                        focusedBorderColor = MaterialTheme.colorScheme.primary,
+                                        unfocusedBorderColor = MaterialTheme.colorScheme.outline
                                     )
                                 )
                             } else {
@@ -121,10 +135,7 @@ fun HomeScreen(
                         navigationIcon = {
                             IconButton(
                                 onClick = { showDrawer = !showDrawer },
-                                modifier = Modifier
-                                    .padding(8.dp)
-                                    .clip(CircleShape)
-                                    .background(MaterialTheme.colorScheme.primaryContainer)
+                                modifier = Modifier.padding(8.dp)
                             ) {
                                 Icon(
                                     imageVector = if (showDrawer) Icons.Default.Close else Icons.Default.Menu,
@@ -136,27 +147,11 @@ fun HomeScreen(
                         actions = {
                             IconButton(
                                 onClick = { showSearchBar = !showSearchBar },
-                                modifier = Modifier
-                                    .padding(8.dp)
-                                    .clip(CircleShape)
-                                    .background(MaterialTheme.colorScheme.primaryContainer)
+                                modifier = Modifier.padding(8.dp)
                             ) {
                                 Icon(
                                     imageVector = if (showSearchBar) Icons.Default.Close else Icons.Default.Search,
                                     contentDescription = if (showSearchBar) "Close Search" else "Search",
-                                    tint = MaterialTheme.colorScheme.primary
-                                )
-                            }
-                            IconButton(
-                                onClick = { showCategoryDialog = true },
-                                modifier = Modifier
-                                    .padding(8.dp)
-                                    .clip(CircleShape)
-                                    .background(MaterialTheme.colorScheme.primaryContainer)
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Default.ArrowDropDown,
-                                    contentDescription = "Filter by Category",
                                     tint = MaterialTheme.colorScheme.primary
                                 )
                             }
@@ -171,52 +166,52 @@ fun HomeScreen(
                     )
                 }
             ) { padding ->
-                // Category filter dialog
-                if (showCategoryDialog) {
-                    AlertDialog(
-                        onDismissRequest = { showCategoryDialog = false },
-                        title = { Text("Select Category") },
-                        text = {
-                            Column {
-                                categories.forEach { category ->
-                                    Row(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .clickable {
-                                                selectedCategory = category
-                                                showCategoryDialog = false
-                                            }
-                                            .padding(8.dp),
-                                        verticalAlignment = Alignment.CenterVertically
-                                    ) {
-                                        RadioButton(
-                                            selected = selectedCategory == category,
-                                            onClick = {
-                                                selectedCategory = category
-                                                showCategoryDialog = false
-                                            }
-                                        )
-                                        Text(text = category, modifier = Modifier.padding(start = 8.dp))
-                                    }
-                                }
-                                if (selectedCategory.isNotBlank()) {
-                                    Spacer(modifier = Modifier.height(8.dp))
-                                    Button(onClick = {
-                                        selectedCategory = ""
-                                        showCategoryDialog = false
-                                    }) {
-                                        Text("Clear Filter")
-                                    }
-                                }
+                // Filter Bar
+                LazyRow(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    contentPadding = PaddingValues(horizontal = 16.dp)
+                ) {
+                    item {
+                        FilterChip(
+                            selected = selectedCategory == null,
+                            onClick = { selectedCategory = null },
+                            label = {
+                                Text(
+                                    text = "All",
+                                    style = MaterialTheme.typography.bodyMedium
+                                )
+                            },
+                            leadingIcon = {
+                                Icon(
+                                    imageVector = Icons.Default.List,
+                                    contentDescription = "All"
+                                )
                             }
-                        },
-                        confirmButton = {},
-                        dismissButton = {
-                            TextButton(onClick = { showCategoryDialog = false }) {
-                                Text("Cancel")
+                        )
+                    }
+                    items(categories) { category ->
+                        FilterChip(
+                            selected = selectedCategory == category,
+                            onClick = {
+                                selectedCategory = if (selectedCategory == category) null else category
+                            },
+                            label = {
+                                Text(
+                                    text = category,
+                                    style = MaterialTheme.typography.bodyMedium
+                                )
+                            },
+                            leadingIcon = {
+                                Icon(
+                                    imageVector = Icons.Default.Info,
+                                    contentDescription = category
+                                )
                             }
-                        }
-                    )
+                        )
+                    }
                 }
 
                 Box(modifier = Modifier.fillMaxSize()) {
@@ -230,8 +225,12 @@ fun HomeScreen(
                             item {
                                 Text(
                                     text = "Search Results",
-                                    style = MaterialTheme.typography.headlineMedium,
-                                    fontWeight = FontWeight.Bold
+                                    style = MaterialTheme.typography.titleLarge.copy(
+                                        fontSize = 22.sp,
+                                        fontWeight = FontWeight.Bold,
+                                        letterSpacing = (-0.5).sp
+                                    ),
+                                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
                                 )
                             }
                             items(coursesWithExtras) { courseWithExtras ->
@@ -239,19 +238,21 @@ fun HomeScreen(
                                     course = courseWithExtras.course,
                                     progress = courseWithExtras.progress,
                                     instructorName = courseWithExtras.instructorName,
-                                    onClick = { navController.navigate(Screen.CourseDetail.createRoute(courseWithExtras.course.id)) }
+                                    onClick = { navController.navigate(Screen.CourseDetail.createRoute(courseWithExtras.course.id)) },
+                                    userRole = user?.role ?: UserRole.STUDENT
                                 )
+                                Spacer(modifier = Modifier.height(16.dp))
                             }
                         } else {
                             item {
                                 Text(
                                     text = "Welcome, ${user.name}!",
-                                    style = MaterialTheme.typography.headlineMedium.copy(
-                                        fontSize = 28.sp,
+                                    style = MaterialTheme.typography.titleLarge.copy(
+                                        fontSize = 22.sp,
                                         fontWeight = FontWeight.Bold,
                                         letterSpacing = (-0.5).sp
                                     ),
-                                    color = MaterialTheme.colorScheme.primary
+                                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
                                 )
                                 Spacer(modifier = Modifier.height(8.dp))
                                 Text(
@@ -261,6 +262,7 @@ fun HomeScreen(
                                         fontWeight = FontWeight.Medium,
                                         letterSpacing = 0.sp
                                     ),
+                                    modifier = Modifier.padding(horizontal = 16.dp),
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
                                 Spacer(modifier = Modifier.height(24.dp))
@@ -269,7 +271,9 @@ fun HomeScreen(
                             // Featured Courses Section
                             item {
                                 Row(
-                                    modifier = Modifier.fillMaxWidth(),
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(horizontal = 16.dp),
                                     horizontalArrangement = Arrangement.SpaceBetween,
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
@@ -302,7 +306,8 @@ fun HomeScreen(
                                     course = courseWithExtras.course,
                                     progress = courseWithExtras.progress,
                                     instructorName = courseWithExtras.instructorName,
-                                    onClick = { navController.navigate(Screen.CourseDetail.createRoute(courseWithExtras.course.id)) }
+                                    onClick = { navController.navigate(Screen.CourseDetail.createRoute(courseWithExtras.course.id)) },
+                                    userRole = user?.role ?: UserRole.STUDENT
                                 )
                                 Spacer(modifier = Modifier.height(16.dp))
                             }
@@ -316,50 +321,57 @@ fun HomeScreen(
                                         fontSize = 22.sp,
                                         fontWeight = FontWeight.Bold,
                                         letterSpacing = (-0.5).sp
-                                    )
+                                    ),
+                                    modifier = Modifier.padding(horizontal = 16.dp)
                                 )
                                 Spacer(modifier = Modifier.height(16.dp))
                             }
 
                             // Categories Grid
                             item {
-                                Row(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                                Column(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(horizontal = 16.dp)
                                 ) {
-                                    Box(modifier = Modifier.weight(1f)) {
-                                        CategoryCard(
-                                            title = "Development",
-                                            icon = Icons.Outlined.Info,
-                                            onClick = { /* TODO: Navigate to category */ }
-                                        )
+                                    Row(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+                                    ) {
+                                        Box(modifier = Modifier.weight(1f)) {
+                                            CategoryCard(
+                                                title = "Development",
+                                                icon = Icons.Outlined.Info,
+                                                onClick = { /* TODO: Navigate to category */ }
+                                            )
+                                        }
+                                        Box(modifier = Modifier.weight(1f)) {
+                                            CategoryCard(
+                                                title = "Design",
+                                                icon = Icons.Outlined.AddCircle,
+                                                onClick = { /* TODO: Navigate to category */ }
+                                            )
+                                        }
                                     }
-                                    Box(modifier = Modifier.weight(1f)) {
-                                        CategoryCard(
-                                            title = "Design",
-                                            icon = Icons.Outlined.AddCircle,
-                                            onClick = { /* TODO: Navigate to category */ }
-                                        )
-                                    }
-                                }
-                                Spacer(modifier = Modifier.height(12.dp))
-                                Row(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    horizontalArrangement = Arrangement.spacedBy(12.dp)
-                                ) {
-                                    Box(modifier = Modifier.weight(1f)) {
-                                        CategoryCard(
-                                            title = "Business",
-                                            icon = Icons.Outlined.ThumbUp,
-                                            onClick = { /* TODO: Navigate to category */ }
-                                        )
-                                    }
-                                    Box(modifier = Modifier.weight(1f)) {
-                                        CategoryCard(
-                                            title = "Marketing",
-                                            icon = Icons.Outlined.Check,
-                                            onClick = { /* TODO: Navigate to category */ }
-                                        )
+                                    Spacer(modifier = Modifier.height(12.dp))
+                                    Row(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+                                    ) {
+                                        Box(modifier = Modifier.weight(1f)) {
+                                            CategoryCard(
+                                                title = "Business",
+                                                icon = Icons.Outlined.ThumbUp,
+                                                onClick = { /* TODO: Navigate to category */ }
+                                            )
+                                        }
+                                        Box(modifier = Modifier.weight(1f)) {
+                                            CategoryCard(
+                                                title = "Marketing",
+                                                icon = Icons.Outlined.Check,
+                                                onClick = { /* TODO: Navigate to category */ }
+                                            )
+                                        }
                                     }
                                 }
                                 Spacer(modifier = Modifier.height(24.dp))
@@ -373,7 +385,8 @@ fun HomeScreen(
                                         fontSize = 22.sp,
                                         fontWeight = FontWeight.Bold,
                                         letterSpacing = (-0.5).sp
-                                    )
+                                    ),
+                                    modifier = Modifier.padding(horizontal = 16.dp)
                                 )
                                 Spacer(modifier = Modifier.height(16.dp))
                             }
@@ -384,7 +397,8 @@ fun HomeScreen(
                                     course = courseWithExtras.course,
                                     progress = courseWithExtras.progress,
                                     instructorName = courseWithExtras.instructorName,
-                                    onClick = { navController.navigate(Screen.CourseDetail.createRoute(courseWithExtras.course.id)) }
+                                    onClick = { navController.navigate(Screen.CourseDetail.createRoute(courseWithExtras.course.id)) },
+                                    userRole = user?.role ?: UserRole.STUDENT
                                 )
                                 Spacer(modifier = Modifier.height(16.dp))
                             }
@@ -420,6 +434,14 @@ private fun BottomNavigationBar(navController: NavController) {
                     Icon(imageVector = Icons.Default.ShoppingCart, contentDescription = "My courses")
                 },
                 label = { Text("My courses") }
+            )
+            NavigationBarItem(
+                selected = false,
+                onClick = { navController.navigate(Screen.Progress.route) },
+                icon = {
+                    Icon(imageVector = Icons.Outlined.Send, contentDescription = "Progress")
+                },
+                label = { Text("Progress") }
             )
             NavigationBarItem(
                 selected = false,
