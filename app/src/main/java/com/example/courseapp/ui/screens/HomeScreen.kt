@@ -7,17 +7,26 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
-
+import androidx.compose.material.icons.outlined.AddCircle
+import androidx.compose.material.icons.outlined.Check
+import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.CheckCircle
+import androidx.compose.material.icons.outlined.PlayArrow
+import androidx.compose.material.icons.outlined.ThumbUp
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.courseapp.model.AuthState
@@ -237,49 +246,147 @@ fun HomeScreen(
                             item {
                                 Text(
                                     text = "Welcome, ${user.name}!",
-                                    style = MaterialTheme.typography.headlineMedium,
-                                    fontWeight = FontWeight.Bold,
+                                    style = MaterialTheme.typography.headlineMedium.copy(
+                                        fontSize = 28.sp,
+                                        fontWeight = FontWeight.Bold,
+                                        letterSpacing = (-0.5).sp
+                                    ),
                                     color = MaterialTheme.colorScheme.primary
                                 )
-                                Spacer(modifier = Modifier.height(12.dp))
+                                Spacer(modifier = Modifier.height(8.dp))
                                 Text(
                                     text = "Continue your learning journey",
-                                    style = MaterialTheme.typography.bodyLarge,
+                                    style = MaterialTheme.typography.bodyLarge.copy(
+                                        fontSize = 16.sp,
+                                        fontWeight = FontWeight.Medium,
+                                        letterSpacing = 0.sp
+                                    ),
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
-                                Spacer(modifier = Modifier.height(12.dp))
-                                Text(
-                                    text = "Available Courses",
-                                    style = MaterialTheme.typography.headlineMedium,
-                                    fontWeight = FontWeight.Bold
-                                )
-                                Spacer(modifier = Modifier.height(12.dp))
+                                Spacer(modifier = Modifier.height(24.dp))
                             }
-                            items(coursesWithExtras) { courseWithExtras ->
+
+                            // Featured Courses Section
+                            item {
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Text(
+                                        text = "Featured Courses",
+                                        style = MaterialTheme.typography.titleLarge.copy(
+                                            fontSize = 22.sp,
+                                            fontWeight = FontWeight.Bold,
+                                            letterSpacing = (-0.5).sp
+                                        )
+                                    )
+                                    TextButton(
+                                        onClick = { /* TODO: Navigate to all courses */ }
+                                    ) {
+                                        Text(
+                                            text = "See All",
+                                            style = MaterialTheme.typography.labelLarge.copy(
+                                                fontWeight = FontWeight.Medium
+                                            ),
+                                            color = MaterialTheme.colorScheme.primary
+                                        )
+                                    }
+                                }
+                                Spacer(modifier = Modifier.height(16.dp))
+                            }
+
+                            // Featured Courses List
+                            items(coursesWithExtras.take(3)) { courseWithExtras ->
                                 CourseCard(
                                     course = courseWithExtras.course,
                                     progress = courseWithExtras.progress,
                                     instructorName = courseWithExtras.instructorName,
                                     onClick = { navController.navigate(Screen.CourseDetail.createRoute(courseWithExtras.course.id)) }
                                 )
-                                Spacer(modifier = Modifier.height(12.dp))
+                                Spacer(modifier = Modifier.height(16.dp))
                             }
 
-                            if (enrolledCourses.isNotEmpty()) {
-                                item {
-                                    Text(
-                                        text = "Continue Learning",
-                                        style = MaterialTheme.typography.headlineMedium,
-                                        fontWeight = FontWeight.Bold
+                            // Popular Categories Section
+                            item {
+                                Spacer(modifier = Modifier.height(24.dp))
+                                Text(
+                                    text = "Popular Categories",
+                                    style = MaterialTheme.typography.titleLarge.copy(
+                                        fontSize = 22.sp,
+                                        fontWeight = FontWeight.Bold,
+                                        letterSpacing = (-0.5).sp
                                     )
-                                }
+                                )
+                                Spacer(modifier = Modifier.height(16.dp))
+                            }
 
-                                items(enrolledCourses) { course ->
-                                    CourseCard(
-                                        course = course,
-                                        onClick = { navController.navigate(Screen.CourseDetail.createRoute(course.id)) }
-                                    )
+                            // Categories Grid
+                            item {
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                                ) {
+                                    Box(modifier = Modifier.weight(1f)) {
+                                        CategoryCard(
+                                            title = "Development",
+                                            icon = Icons.Outlined.Info,
+                                            onClick = { /* TODO: Navigate to category */ }
+                                        )
+                                    }
+                                    Box(modifier = Modifier.weight(1f)) {
+                                        CategoryCard(
+                                            title = "Design",
+                                            icon = Icons.Outlined.AddCircle,
+                                            onClick = { /* TODO: Navigate to category */ }
+                                        )
+                                    }
                                 }
+                                Spacer(modifier = Modifier.height(12.dp))
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                                ) {
+                                    Box(modifier = Modifier.weight(1f)) {
+                                        CategoryCard(
+                                            title = "Business",
+                                            icon = Icons.Outlined.ThumbUp,
+                                            onClick = { /* TODO: Navigate to category */ }
+                                        )
+                                    }
+                                    Box(modifier = Modifier.weight(1f)) {
+                                        CategoryCard(
+                                            title = "Marketing",
+                                            icon = Icons.Outlined.Check,
+                                            onClick = { /* TODO: Navigate to category */ }
+                                        )
+                                    }
+                                }
+                                Spacer(modifier = Modifier.height(24.dp))
+                            }
+
+                            // Continue Learning Section
+                            item {
+                                Text(
+                                    text = "Continue Learning",
+                                    style = MaterialTheme.typography.titleLarge.copy(
+                                        fontSize = 22.sp,
+                                        fontWeight = FontWeight.Bold,
+                                        letterSpacing = (-0.5).sp
+                                    )
+                                )
+                                Spacer(modifier = Modifier.height(16.dp))
+                            }
+
+                            // Continue Learning Courses
+                            items(coursesWithExtras.drop(3)) { courseWithExtras ->
+                                CourseCard(
+                                    course = courseWithExtras.course,
+                                    progress = courseWithExtras.progress,
+                                    instructorName = courseWithExtras.instructorName,
+                                    onClick = { navController.navigate(Screen.CourseDetail.createRoute(courseWithExtras.course.id)) }
+                                )
+                                Spacer(modifier = Modifier.height(16.dp))
                             }
                         }
                     }
@@ -321,6 +428,47 @@ private fun BottomNavigationBar(navController: NavController) {
                     Icon(imageVector = Icons.Default.Person, contentDescription = "Profile")
                 },
                 label = { Text("Profile") }
+            )
+        }
+    }
+}
+
+@Composable
+private fun CategoryCard(
+    title: String,
+    icon: ImageVector,
+    onClick: () -> Unit
+) {
+    Card(
+        onClick = onClick,
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(100.dp),
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.primaryContainer
+        )
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Icon(
+                imageVector = icon,
+                contentDescription = title,
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.size(32.dp)
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = title,
+                style = MaterialTheme.typography.titleMedium.copy(
+                    fontWeight = FontWeight.Medium
+                ),
+                color = MaterialTheme.colorScheme.onPrimaryContainer
             )
         }
     }

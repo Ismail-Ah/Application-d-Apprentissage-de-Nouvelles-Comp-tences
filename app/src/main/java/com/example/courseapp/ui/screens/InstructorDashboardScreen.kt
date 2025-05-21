@@ -9,16 +9,23 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.outlined.AddCircle
+import androidx.compose.material.icons.outlined.MoreVert
+import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.courseapp.model.Course
 import com.example.courseapp.model.User
@@ -183,46 +190,150 @@ private fun CreateCourseDialog(
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Create New Course") },
+        title = {
+            Text(
+                "Create New Course",
+                style = MaterialTheme.typography.headlineSmall.copy(
+                    fontWeight = FontWeight.Bold,
+                    color = Color(0xFF167464)
+                )
+            )
+        },
         text = {
             Column(
-                modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
+                // Course Title
                 OutlinedTextField(
                     value = title,
                     onValueChange = { title = it },
                     label = { Text("Course Title") },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                        focusedBorderColor = Color(0xFF167464),
+                        focusedLabelColor = Color(0xFF167464),
+                        cursorColor = Color(0xFF167464)
+                    ),
+                    shape = RoundedCornerShape(12.dp),
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Default.Edit,
+                            contentDescription = "Title",
+                            tint = Color(0xFF167464)
+                        )
+                    }
                 )
+
+                // Description
                 OutlinedTextField(
                     value = description,
                     onValueChange = { description = it },
                     label = { Text("Description") },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                        focusedBorderColor = Color(0xFF167464),
+                        focusedLabelColor = Color(0xFF167464),
+                        cursorColor = Color(0xFF167464)
+                    ),
+                    shape = RoundedCornerShape(12.dp),
+                    minLines = 3,
+                    maxLines = 5,
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Default.Info,
+                            contentDescription = "Description",
+                            tint = Color(0xFF167464)
+                        )
+                    }
                 )
-                Button(onClick = { imagePicker.launch("image/*") }) {
-                    Text(if (imageUri != null) "Image Selected" else "Select Image")
+
+                // Image Selection
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { imagePicker.launch("image/*") },
+                    colors = CardDefaults.cardColors(
+                        containerColor = Color(0xFF167464).copy(alpha = 0.1f)
+                    ),
+                    shape = RoundedCornerShape(12.dp)
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        horizontalArrangement = Arrangement.spacedBy(12.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            imageVector = if (imageUri != null) Icons.Default.CheckCircle else Icons.Default.Add,
+                            contentDescription = "Select Image",
+                            tint = Color(0xFF167464)
+                        )
+                        Text(
+                            if (imageUri != null) "Image Selected" else "Select Course Image",
+                            color = Color(0xFF167464)
+                        )
+                    }
                 }
+
+                // Category
                 OutlinedTextField(
                     value = category,
                     onValueChange = { category = it },
                     label = { Text("Category") },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                        focusedBorderColor = Color(0xFF167464),
+                        focusedLabelColor = Color(0xFF167464),
+                        cursorColor = Color(0xFF167464)
+                    ),
+                    shape = RoundedCornerShape(12.dp),
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Default.List,
+                            contentDescription = "Category",
+                            tint = Color(0xFF167464)
+                        )
+                    }
                 )
             }
         },
         confirmButton = {
-            TextButton(
+            Button(
                 onClick = {
                     onCreateCourse(title, description, imageUri, category)
                 },
-                enabled = title.isNotBlank() && description.isNotBlank() && imageUri != null && category.isNotBlank()
-            ) { Text("Create") }
+                enabled = title.isNotBlank() && description.isNotBlank() && imageUri != null && category.isNotBlank(),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFFFF6D00),
+                    disabledContainerColor = Color(0xFFFF6D00).copy(alpha = 0.5f)
+                ),
+                shape = RoundedCornerShape(8.dp),
+                modifier = Modifier.padding(end = 8.dp)
+            ) {
+                Text(
+                    "Create Course",
+                    style = MaterialTheme.typography.titleMedium.copy(
+                        fontWeight = FontWeight.Bold
+                    )
+                )
+            }
         },
         dismissButton = {
-            TextButton(onClick = onDismiss) { Text("Cancel") }
-        }
+            TextButton(
+                onClick = onDismiss,
+                colors = ButtonDefaults.textButtonColors(
+                    contentColor = Color(0xFF167464)
+                )
+            ) {
+                Text("Cancel")
+            }
+        },
+        containerColor = MaterialTheme.colorScheme.surface,
+        shape = RoundedCornerShape(16.dp)
     )
 }
 

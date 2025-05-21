@@ -15,49 +15,66 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
+import androidx.compose.material3.Shapes
+import androidx.compose.material3.ShapeDefaults
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.unit.dp
 
 private val DarkColorScheme = darkColorScheme(
-    primary = PrimaryBlue,
+    primary = PrimaryGreen,
     onPrimary = Color.White,
-    primaryContainer = PrimaryDarkBlue,
+    primaryContainer = PrimaryDarkGreen,
     onPrimaryContainer = Color.White,
-    secondary = SecondaryGreen,
+    secondary = SecondaryOrange,
     onSecondary = Color.White,
-    secondaryContainer = SecondaryDarkGreen,
+    secondaryContainer = SecondaryDarkOrange,
     onSecondaryContainer = Color.White,
-    tertiary = AccentOrange,
+    tertiary = SecondaryOrange,
     onTertiary = Color.White,
     background = BackgroundDark,
     onBackground = TextPrimaryDark,
     surface = SurfaceDark,
     onSurface = TextPrimaryDark,
+    surfaceVariant = CardBackgroundDark,
+    onSurfaceVariant = TextSecondaryDark,
     error = ErrorRed,
-    onError = Color.White
+    onError = Color.White,
+    outline = DividerDark
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = PrimaryBlue,
+    primary = PrimaryGreen,
     onPrimary = Color.White,
-    primaryContainer = PrimaryLightBlue,
-    onPrimaryContainer = PrimaryDarkBlue,
-    secondary = SecondaryGreen,
+    primaryContainer = PrimaryLightGreen,
+    onPrimaryContainer = PrimaryDarkGreen,
+    secondary = SecondaryOrange,
     onSecondary = Color.White,
-    secondaryContainer = SecondaryLightGreen,
-    onSecondaryContainer = SecondaryDarkGreen,
-    tertiary = AccentOrange,
+    secondaryContainer = SecondaryLightOrange,
+    onSecondaryContainer = SecondaryDarkOrange,
+    tertiary = SecondaryOrange,
     onTertiary = Color.White,
     background = BackgroundLight,
     onBackground = TextPrimaryLight,
     surface = SurfaceLight,
     onSurface = TextPrimaryLight,
+    surfaceVariant = CardBackgroundLight,
+    onSurfaceVariant = TextSecondaryLight,
     error = ErrorRed,
-    onError = Color.White
+    onError = Color.White,
+    outline = DividerLight
+)
+
+// Custom shapes for components
+private val AppShapes = Shapes(
+    small = RoundedCornerShape(8.dp),
+    medium = RoundedCornerShape(16.dp),
+    large = RoundedCornerShape(24.dp)
 )
 
 @Composable
 fun ELearningTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    dynamicColor: Boolean = false, // Disable dynamic color for now to use our custom colors
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
@@ -80,6 +97,7 @@ fun ELearningTheme(
     MaterialTheme(
         colorScheme = colorScheme,
         typography = Typography,
+        shapes = AppShapes,
         content = content
     )
 }

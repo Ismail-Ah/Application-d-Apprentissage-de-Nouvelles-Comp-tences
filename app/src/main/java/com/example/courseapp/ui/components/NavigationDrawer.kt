@@ -119,28 +119,6 @@ fun NavigationDrawer(
                 )
 
                 NavigationDrawerItem(
-                    icon = { Icon(Icons.Outlined.Home, contentDescription = "Certificate") },
-                    label = { Text("Certificate") },
-                    selected = false,
-                    onClick = {
-                        navController.navigate(Screen.Progress.route)
-                        onDrawerStateChange(false)
-                    },
-                    modifier = Modifier.padding(vertical = 4.dp)
-                )
-
-                NavigationDrawerItem(
-                    icon = { Icon(Icons.Filled.Add, contentDescription = "Downloads") },
-                    label = { Text("Downloads") },
-                    selected = false,
-                    onClick = {
-                        navController.navigate(Screen.Downloads.route)
-                        onDrawerStateChange(false)
-                    },
-                    modifier = Modifier.padding(vertical = 4.dp)
-                )
-
-                NavigationDrawerItem(
                     icon = { Icon(Icons.Filled.Settings, contentDescription = "Settings") },
                     label = { Text("Settings") },
                     selected = false,

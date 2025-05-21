@@ -202,42 +202,10 @@ fun NavGraph(
                 courseViewModel = courseViewModel
             )
         }
-        composable(
-            route = Screen.Certificate.route,
-            arguments = listOf(
-                navArgument("certificateId") { type = NavType.StringType }
-            )
-        ) {
-            CertificateScreen(
-                navController = navController,
-                courseViewModel = courseViewModel,
-                certificateId = it.arguments?.getString("certificateId") ?: ""
-            )
-        }
-        composable(Screen.AddCreditCard.route) {
-            AddCreditCardScreen(
-                navController = navController,
-                creditCardViewModel = creditCardViewModel,
-                authViewModel = authViewModel
-            )
-        }
-        composable(Screen.CreditCards.route) {
-            CreditCardsScreen(
-                navController = navController,
-                creditCardViewModel = creditCardViewModel,
-                authViewModel = authViewModel
-            )
-        }
         composable(Screen.Profile.route) {
             ProfileScreen(
                 navController = navController,
                 authViewModel = authViewModel
-            )
-        }
-        composable(Screen.Downloads.route) {
-            DownloadsScreen(
-                navController = navController,
-                courseViewModel = courseViewModel
             )
         }
     }

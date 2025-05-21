@@ -6,18 +6,15 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -47,12 +44,20 @@ fun ProfileScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(padding)
+                    .padding(horizontal = 16.dp)
                     .padding(bottom = 72.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 if (user != null) {
-                    AddCreditCardCard(navController)
+                    // Profile Header
+                    AsyncImage(
+                        model = user.profileImage,
+                        contentDescription = "Profile Image",
+                        modifier = Modifier
+                            .size(120.dp)
+                            .clip(CircleShape)
+                            .background(MaterialTheme.colorScheme.surfaceVariant)
+                    )
                     Spacer(modifier = Modifier.height(24.dp))
                     Text(
                         text = user.name,
@@ -62,29 +67,86 @@ fun ProfileScreen(
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
                         text = user.email,
-                        style = MaterialTheme.typography.bodyLarge
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Star,
-                            contentDescription = "XP",
-                            tint = MaterialTheme.colorScheme.primary,
-                            modifier = Modifier.size(20.dp)
-                        )
-                        Spacer(modifier = Modifier.width(4.dp))
-                        Text(
-                            text = "${user.xp} XP",
-                            style = MaterialTheme.typography.bodyLarge,
-                            color = MaterialTheme.colorScheme.primary
-                        )
-                    }
                     Spacer(modifier = Modifier.height(32.dp))
-                    Button(onClick = { authViewModel.signOut() }) {
-                        Text("Logout")
+
+                    // Settings Options
+                    Card(
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = RoundedCornerShape(16.dp),
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+                    ) {
+                        Column {
+                            // Home Option
+                            ListItem(
+                                headlineContent = { Text("Home") },
+                                leadingContent = {
+                                    Icon(
+                                        Icons.Default.Home,
+                                        contentDescription = "Home",
+                                        tint = MaterialTheme.colorScheme.primary
+                                    )
+                                },
+                                trailingContent = {
+                                    Icon(
+                                        Icons.AutoMirrored.Filled.ArrowForward,
+                                        contentDescription = "Navigate",
+                                        tint = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                },
+                                modifier = Modifier.clickable {
+                                    navController.navigate(Screen.Home.route)
+                                }
+                            )
+                            Divider()
+
+                            // My Courses Option
+                            ListItem(
+                                headlineContent = { Text("My Courses") },
+                                leadingContent = {
+                                    Icon(
+                                        Icons.Default.ShoppingCart,
+                                        contentDescription = "My Courses",
+                                        tint = MaterialTheme.colorScheme.primary
+                                    )
+                                },
+                                trailingContent = {
+                                    Icon(
+                                        Icons.AutoMirrored.Filled.ArrowForward,
+                                        contentDescription = "Navigate",
+                                        tint = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                },
+                                modifier = Modifier.clickable {
+                                    navController.navigate(Screen.MyCourses.route)
+                                }
+                            )
+                            Divider()
+
+                            // Settings Option
+                            ListItem(
+                                headlineContent = { Text("Settings") },
+                                leadingContent = {
+                                    Icon(
+                                        Icons.Default.Settings,
+                                        contentDescription = "Settings",
+                                        tint = MaterialTheme.colorScheme.primary
+                                    )
+                                },
+                                trailingContent = {
+                                    Icon(
+                                        Icons.AutoMirrored.Filled.ArrowForward,
+                                        contentDescription = "Navigate",
+                                        tint = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                },
+                                modifier = Modifier.clickable {
+                                    navController.navigate(Screen.Settings.route)
+                                }
+                            )
+                        }
                     }
                 } else {
                     Text("No user information available.")
@@ -112,7 +174,7 @@ private fun BottomNavigationBarProfile(navController: NavController) {
             )
             NavigationBarItem(
                 selected = false,
-                onClick = {},
+                onClick = { navController.navigate(Screen.MyCourses.route) },
                 icon = {
                     Icon(imageVector = Icons.Default.ShoppingCart, contentDescription = "My courses")
                 },
@@ -126,57 +188,6 @@ private fun BottomNavigationBarProfile(navController: NavController) {
                 },
                 label = { Text("Profile") }
             )
-        }
-    }
-}
-
-@Composable
-private fun AddCreditCardCard(navController: NavController) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(80.dp)
-            .clickable { navController.navigate(Screen.CreditCards.route) },
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Box(
-                modifier = Modifier
-                    .size(48.dp)
-                    .background(
-                        color = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
-                        shape = CircleShape
-                    ),
-                contentAlignment = Alignment.Center
-            ) {
-                AsyncImage(
-                    model = "https://img.icons8.com/ios-filled/50/000000/bank-card-back-side.png",
-                    contentDescription = "Credit Cards"
-                )
-            }
-            Spacer(modifier = Modifier.width(16.dp))
-            Column(
-                modifier = Modifier.weight(1f)
-            ) {
-                Text(
-                    text = "Credit Cards",
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
-                    fontWeight = FontWeight.Bold
-                )
-                Text(
-                    text = "Manage your payment methods",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
-                )
-            }
         }
     }
 } 
